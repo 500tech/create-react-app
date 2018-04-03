@@ -27,7 +27,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     testMatch: [
       '<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}',
       '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}',
-      '<rootDir>/__tests__/**/*.{js,jsx,mjs}',
+      '<rootDir>/__tests__/**/?(*.)(spec|test).{js,jsx,mjs}',
     ],
     testEnvironment: 'node',
     testURL: 'http://localhost',
