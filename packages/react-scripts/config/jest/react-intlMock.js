@@ -11,6 +11,7 @@ const FormattedPlural = () => React.createElement('div');
 const FormattedNumber = () => React.createElement('div');
 const FormattedDate = () => React.createElement('div');
 const FormattedRelative = () => React.createElement('div');
+const IntlProvider = ({ children }) => React.createElement('div', null, children);
 
 module.exports = {
     addLocaleData,
@@ -22,5 +23,6 @@ module.exports = {
     FormattedDate,
     FormattedRelative,
     intlShape,
-    injectIntl: (data) => (data)
+    injectIntl: (data) => (data),
+    IntlProvider
 };
