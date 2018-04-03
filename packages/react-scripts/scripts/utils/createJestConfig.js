@@ -27,6 +27,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     testMatch: [
       '<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}',
       '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}',
+      '<rootDir>/__tests__/**/*.{js,jsx,mjs}',
     ],
     testEnvironment: 'node',
     testURL: 'http://localhost',
@@ -34,7 +35,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
       '^.+\\.(js|jsx|mjs)$': isEjecting
         ? '<rootDir>/node_modules/babel-jest'
         : resolve('config/jest/babelTransform.js'),
-      '^.+\\.css$': resolve('config/jest/cssTransform.js'),
+      '^.+\\.s?css$': resolve('config/jest/cssTransform.js'),
       '^(?!.*\\.(js|jsx|mjs|css|json)$)': resolve(
         'config/jest/fileTransform.js'
       ),
@@ -42,6 +43,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$'],
     moduleNameMapper: {
       '^react-native$': 'react-native-web',
+      'react-intl$': resolve('config/jest/react-intlMock.js')
     },
     moduleFileExtensions: [
       'web.js',
@@ -57,9 +59,12 @@ module.exports = (resolve, rootDir, isEjecting) => {
       'src'
     ],
     'modulePaths': [
-      '/app',
+      '/src',
       '<rootDir>'
-    ]
+    ],
+    'snapshotSerializers': [
+        'enzyme-to-json/serializer'
+    ],
   };
   if (rootDir) {
     config.rootDir = rootDir;
