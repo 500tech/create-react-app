@@ -31,7 +31,7 @@ const publicUrl = '';
 const env = getClientEnvironment(publicUrl);
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const isAnalyzeMode = process && process.env && process.env.ANALYZE;
+const isAnalyzeMode = process && process.env && process.env.WEBPACK_ANALYZE;
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.

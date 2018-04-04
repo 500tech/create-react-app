@@ -37,7 +37,7 @@ const publicUrl = publicPath.slice(0, -1);
 const env = getClientEnvironment(publicUrl);
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const isAnalyzeMode = process && process.env && process.env.ANALYZE;
+const isAnalyzeMode = process && process.env && process.env.WEBPACK_ANALYZE;
 
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
