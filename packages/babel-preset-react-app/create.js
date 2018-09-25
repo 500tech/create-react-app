@@ -141,6 +141,9 @@ module.exports = function(api, opts, env) {
       isEnvTest &&
         // Transform dynamic import to require
         require('babel-plugin-transform-dynamic-import').default,
+
+      require.resolve('babel-plugin-styled-components'),
+      require.resolve('@babel/plugin-transform-async-to-generator'),
     ].filter(Boolean),
   };
 };
