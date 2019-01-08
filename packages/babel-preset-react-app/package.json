@@ -1,5 +1,5 @@
 {
-  "name": "@500/babel-preset-react-app",
+  "name": "@500tech/babel-preset-react-app",
   "version": "7.0.0",
   "description": "Babel preset used by Create React App",
   "repository": "500tech/create-react-app",
