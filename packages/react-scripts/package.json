@@ -1,5 +1,5 @@
 {
-  "name": "react-scripts",
+  "name": "@500tech/react-scripts",
   "version": "2.1.3",
   "description": "Configuration and scripts for Create React App.",
   "repository": "500tech/create-react-app",
@@ -58,6 +58,7 @@
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
     "mini-css-extract-plugin": "0.4.3",
+    "node-sass": "^4.11.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
