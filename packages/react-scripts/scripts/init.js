@@ -75,16 +75,8 @@ function tryGitInit(appPath) {
   }
 }
 
-module.exports = function(
-  appPath,
-  appName,
-  verbose,
-  originalDirectory,
-  template
-) {
-  const ownPath = path.dirname(
-    require.resolve(path.join(__dirname, '..', 'package.json'))
-  );
+module.exports = function(appPath, appName, verbose, originalDirectory, template) {
+  const ownPath = path.dirname(require.resolve(path.join(__dirname, '..', 'package.json')));
   const appPackage = require(path.join(appPath, 'package.json'));
   const useYarn = fs.existsSync(path.join(appPath, 'yarn.lock'));
 
@@ -99,6 +91,27 @@ module.exports = function(
     build: 'react-scripts build',
     test: 'react-scripts test',
     eject: 'react-scripts eject',
+    precommit: 'lint-staged',
+    postcommit: 'git reset',
+    flow: 'flow',
+  };
+
+  // Add prettier
+  appPackage.prettier = {
+    printWidth: 80,
+    tabWidth: 2,
+    useTabs: false,
+    semi: true,
+    singleQuote: true,
+    trailingComma: 'none',
+    bracketSpacing: true,
+    jsxBracketSameLine: true,
+    requirePragma: false,
+  };
+
+  // Add precommit hooks
+  appPackage['lint-staged'] = {
+    '*.js': ['./node_modules/.bin/prettier --write', 'git add'],
   };
 
   // Setup the eslint config
@@ -116,10 +129,7 @@ module.exports = function(
 
   const readmeExists = fs.existsSync(path.join(appPath, 'README.md'));
   if (readmeExists) {
-    fs.renameSync(
-      path.join(appPath, 'README.md'),
-      path.join(appPath, 'README.old.md')
-    );
+    fs.renameSync(path.join(appPath, 'README.md'), path.join(appPath, 'README.old.md'));
   }
 
   // Copy the files for the user
@@ -129,20 +139,14 @@ module.exports = function(
   if (fs.existsSync(templatePath)) {
     fs.copySync(templatePath, appPath);
   } else {
-    console.error(
-      `Could not locate supplied template: ${chalk.green(templatePath)}`
-    );
+    console.error(`Could not locate supplied template: ${chalk.green(templatePath)}`);
     return;
   }
 
   // Rename gitignore after the fact to prevent npm from renaming it to .npmignore
   // See: https://github.com/npm/npm/issues/1862
   try {
-    fs.moveSync(
-      path.join(appPath, 'gitignore'),
-      path.join(appPath, '.gitignore'),
-      []
-    );
+    fs.moveSync(path.join(appPath, 'gitignore'), path.join(appPath, '.gitignore'), []);
   } catch (err) {
     // Append if there's already a `.gitignore` file there
     if (err.code === 'EEXIST') {
@@ -154,45 +158,56 @@ module.exports = function(
     }
   }
 
-  let command;
-  let args;
+  function npmInstall(dev, baseDependencies = []) {
+    let command;
+    let args;
 
-  if (useYarn) {
-    command = 'yarnpkg';
-    args = ['add'];
-  } else {
-    command = 'npm';
-    args = ['install', '--save', verbose && '--verbose'].filter(e => e);
-  }
-  args.push('react', 'react-dom');
-
-  // Install additional template dependencies, if present
-  const templateDependenciesPath = path.join(
-    appPath,
-    '.template.dependencies.json'
-  );
-  if (fs.existsSync(templateDependenciesPath)) {
-    const templateDependencies = require(templateDependenciesPath).dependencies;
-    args = args.concat(
-      Object.keys(templateDependencies).map(key => {
-        return `${key}@${templateDependencies[key]}`;
-      })
-    );
-    fs.unlinkSync(templateDependenciesPath);
-  }
-
-  // Install react and react-dom for backward compatibility with old CRA cli
-  // which doesn't install react and react-dom along with react-scripts
-  // or template is presetend (via --internal-testing-template)
-  if (!isReactInstalled(appPackage) || template) {
-    console.log(`Installing react and react-dom using ${command}...`);
-    console.log();
-
-    const proc = spawn.sync(command, args, { stdio: 'inherit' });
-    if (proc.status !== 0) {
-      console.error(`\`${command} ${args.join(' ')}\` failed`);
-      return;
+    if (useYarn) {
+      command = 'yarnpkg';
+      args = ['add'];
+    } else {
+      command = 'npm';
+      args = ['install', '--save' + dev ? '-dev' : '', verbose && '--verbose'].filter(e => e);
     }
+    args.push(...baseDependencies);
+
+    // Install additional template dependencies, if present
+    const templateDependenciesPath = path.join(
+      appPath,
+      `.template.${dev ? 'dev-' : ''}dependencies.json`
+    );
+    if (fs.existsSync(templateDependenciesPath)) {
+      const templateDependencies = require(templateDependenciesPath).dependencies;
+      args = args.concat(
+        Object.keys(templateDependencies).map(key => {
+          return `${key}@${templateDependencies[key]}`;
+        })
+      );
+      fs.unlinkSync(templateDependenciesPath);
+    }
+
+    // Install react and react-dom for backward compatibility with old CRA cli
+    // which doesn't install react and react-dom along with react-scripts
+    // or template is presetend (via --internal-testing-template)
+    if (!isReactInstalled(appPackage) || template) {
+      console.log(`Installing dependencies using ${command}...`);
+      console.log();
+
+      const proc = spawn.sync(command, args, { stdio: 'inherit' });
+      if (proc.status !== 0) {
+        console.error(`\`${command} ${args.join(' ')}\` failed`);
+        return true;
+      }
+    }
+  }
+
+  let error = npmInstall(false, ['react', 'react-dom']);
+  if (error) {
+    return;
+  }
+  error = npmInstall(true, ['prettier']);
+  if (error) {
+    return;
   }
 
   if (useTypeScript) {
@@ -224,23 +239,15 @@ module.exports = function(
   console.log(chalk.cyan(`  ${displayedCommand} start`));
   console.log('    Starts the development server.');
   console.log();
-  console.log(
-    chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`)
-  );
+  console.log(chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`));
   console.log('    Bundles the app into static files for production.');
   console.log();
   console.log(chalk.cyan(`  ${displayedCommand} test`));
   console.log('    Starts the test runner.');
   console.log();
-  console.log(
-    chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}eject`)
-  );
-  console.log(
-    '    Removes this tool and copies build dependencies, configuration files'
-  );
-  console.log(
-    '    and scripts into the app directory. If you do this, you can’t go back!'
-  );
+  console.log(chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}eject`));
+  console.log('    Removes this tool and copies build dependencies, configuration files');
+  console.log('    and scripts into the app directory. If you do this, you can’t go back!');
   console.log();
   console.log('We suggest that you begin by typing:');
   console.log();
@@ -248,11 +255,7 @@ module.exports = function(
   console.log(`  ${chalk.cyan(`${displayedCommand} start`)}`);
   if (readmeExists) {
     console.log();
-    console.log(
-      chalk.yellow(
-        'You had a `README.md` file, we renamed it to `README.old.md`'
-      )
-    );
+    console.log(chalk.yellow('You had a `README.md` file, we renamed it to `README.old.md`'));
   }
   console.log();
   console.log('Happy hacking!');
@@ -262,7 +265,6 @@ function isReactInstalled(appPackage) {
   const dependencies = appPackage.dependencies || {};
 
   return (
-    typeof dependencies.react !== 'undefined' &&
-    typeof dependencies['react-dom'] !== 'undefined'
+    typeof dependencies.react !== 'undefined' && typeof dependencies['react-dom'] !== 'undefined'
   );
 }

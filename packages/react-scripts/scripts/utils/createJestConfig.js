@@ -15,8 +15,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
   // Use this instead of `paths.testsSetup` to avoid putting
   // an absolute filename into configuration after ejecting.
   const setupTestsMatches = paths.testsSetup.match(/src[/\\]setupTests\.(.+)/);
-  const setupTestsFileExtension =
-    (setupTestsMatches && setupTestsMatches[1]) || 'js';
+  const setupTestsFileExtension = (setupTestsMatches && setupTestsMatches[1]) || 'js';
   const setupTestsFile = fs.existsSync(paths.testsSetup)
     ? `<rootDir>/src/setupTests.${setupTestsFileExtension}`
     : undefined;
@@ -28,13 +27,9 @@ module.exports = (resolve, rootDir, isEjecting) => {
     // But we can't simply emit this because it'll be an absolute path.
     // The proper fix is to write jest.config.js on eject instead of a package.json key.
     // Then these can always stay as require.resolve()s.
-    resolver: isEjecting
-      ? 'jest-pnp-resolver'
-      : require.resolve('jest-pnp-resolver'),
+    resolver: isEjecting ? 'jest-pnp-resolver' : require.resolve('jest-pnp-resolver'),
     setupFiles: [
-      isEjecting
-        ? 'react-app-polyfill/jsdom'
-        : require.resolve('react-app-polyfill/jsdom'),
+      isEjecting ? 'react-app-polyfill/jsdom' : require.resolve('react-app-polyfill/jsdom'),
     ],
 
     setupTestFrameworkScriptFile: setupTestsFile,
@@ -49,9 +44,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
         ? '<rootDir>/node_modules/babel-jest'
         : resolve('config/jest/babelTransform.js'),
       '^.+\\.css$': resolve('config/jest/cssTransform.js'),
-      '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': resolve(
-        'config/jest/fileTransform.js'
-      ),
+      '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': resolve('config/jest/fileTransform.js'),
     },
     transformIgnorePatterns: [
       '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$',
@@ -64,6 +57,8 @@ module.exports = (resolve, rootDir, isEjecting) => {
     moduleFileExtensions: [...paths.moduleFileExtensions, 'node'].filter(
       ext => !ext.includes('mjs')
     ),
+    moduleDirectories: ['node_modules', 'src'],
+    modulePaths: ['/app', '<rootDir>'],
   };
   if (rootDir) {
     config.rootDir = rootDir;
@@ -89,8 +84,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     });
     const unsupportedKeys = Object.keys(overrides);
     if (unsupportedKeys.length) {
-      const isOverridingSetupFile =
-        unsupportedKeys.indexOf('setupTestFrameworkScriptFile') > -1;
+      const isOverridingSetupFile = unsupportedKeys.indexOf('setupTestFrameworkScriptFile') > -1;
 
       if (isOverridingSetupFile) {
         console.error(
@@ -108,15 +102,11 @@ module.exports = (resolve, rootDir, isEjecting) => {
           chalk.red(
             '\nOut of the box, Create React App only supports overriding ' +
               'these Jest options:\n\n' +
-              supportedKeys
-                .map(key => chalk.bold('  \u2022 ' + key))
-                .join('\n') +
+              supportedKeys.map(key => chalk.bold('  \u2022 ' + key)).join('\n') +
               '.\n\n' +
               'These options in your package.json Jest configuration ' +
               'are not currently supported by Create React App:\n\n' +
-              unsupportedKeys
-                .map(key => chalk.bold('  \u2022 ' + key))
-                .join('\n') +
+              unsupportedKeys.map(key => chalk.bold('  \u2022 ' + key)).join('\n') +
               '\n\nIf you wish to override other Jest options, you need to ' +
               'eject from the default setup. You can do so by running ' +
               chalk.bold('npm run eject') +
