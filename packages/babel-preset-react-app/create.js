@@ -180,6 +180,7 @@ module.exports = function(api, opts, env) {
       isEnvTest &&
         // Transform dynamic import to require
         require('babel-plugin-dynamic-import-node'),
+      require('babel-plugin-styled-components').default,
     ].filter(Boolean),
     overrides: [
       isFlowEnabled && {

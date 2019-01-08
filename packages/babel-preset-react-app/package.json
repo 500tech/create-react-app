@@ -1,11 +1,14 @@
 {
-  "name": "babel-preset-react-app",
+  "name": "@500/babel-preset-react-app",
   "version": "7.0.0",
   "description": "Babel preset used by Create React App",
-  "repository": "facebook/create-react-app",
+  "repository": "500tech/create-react-app",
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/facebook/create-react-app/issues"
+    "url": "https://github.com/500tech/create-react-app/issues"
   },
   "files": [
     "create.js",
@@ -35,6 +38,7 @@
     "babel-loader": "8.0.4",
     "babel-plugin-dynamic-import-node": "2.2.0",
     "babel-plugin-macros": "2.4.2",
+    "babel-plugin-styled-components": "^1.10.0",
     "babel-plugin-transform-react-remove-prop-types": "0.4.20"
   }
 }
