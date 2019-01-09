@@ -168,6 +168,7 @@ module.exports = function(api, opts, env) {
           absoluteRuntime: absoluteRuntimePath,
         },
       ],
+      require('babel-plugin-emotion').default,
       isEnvProduction && [
         // Remove PropTypes from production build
         require('babel-plugin-transform-react-remove-prop-types').default,
