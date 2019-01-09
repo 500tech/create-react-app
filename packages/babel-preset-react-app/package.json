@@ -1,6 +1,6 @@
 {
   "name": "@500tech/babel-preset-react-app",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "description": "Babel preset used by Create React App",
   "repository": "500tech/create-react-app",
   "publishConfig": {
@@ -39,9 +39,7 @@
     "babel-plugin-dynamic-import-node": "2.2.0",
     "babel-plugin-macros": "2.4.2",
     "babel-plugin-styled-components": "^1.10.0",
-    "babel-plugin-transform-react-remove-prop-types": "0.4.20"
-  },
-  "devDependencies": {
+    "babel-plugin-transform-react-remove-prop-types": "0.4.20",
     "babel-plugin-emotion": "^10.0.6"
   }
 }
