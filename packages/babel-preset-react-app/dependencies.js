@@ -123,6 +123,7 @@ module.exports = function(api, opts) {
       ],
       // Adds syntax support for import()
       require('@babel/plugin-syntax-dynamic-import').default,
+      require('emotion').default,
       isEnvTest &&
         // Transform dynamic import to require
         require('babel-plugin-transform-dynamic-import').default,
