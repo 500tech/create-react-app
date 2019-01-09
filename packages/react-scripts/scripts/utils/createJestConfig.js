@@ -39,8 +39,9 @@ module.exports = (resolve, rootDir, isEjecting) => {
 
     setupTestFrameworkScriptFile: setupTestsFile,
     testMatch: [
-      '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
-      '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}',
+      '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx,mjs}',
+      '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx,mjs}',
+      '<rootDir>/__tests__/**/?(*.)(spec|test).{js,jsx,ts,tsx,mjs}',
     ],
     testEnvironment: 'jsdom',
     testURL: 'http://localhost',
@@ -60,6 +61,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     moduleNameMapper: {
       '^react-native$': 'react-native-web',
       '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
+      'react-intl$': resolve('config/jest/react-intlMock.js'),
     },
     moduleFileExtensions: [...paths.moduleFileExtensions, 'node'].filter(
       ext => !ext.includes('mjs')
