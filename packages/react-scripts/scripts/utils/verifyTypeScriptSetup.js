@@ -127,7 +127,7 @@ function verifyTypeScriptSetup() {
     },
     paths: {
       value: {
-        '*': ['./src/*'],
+        '*': ['./src/*', './__tests__/*'],
       },
       reason: 'aliased imports are supported',
     },
@@ -192,6 +192,7 @@ function verifyTypeScriptSetup() {
   }
 
   for (const option of Object.keys(compilerOptions)) {
+    const isSkippedOption = option === 'paths' || option === 'baseUrl';
     const { parsedValue, value, suggested, reason } = compilerOptions[option];
 
     const valueToCheck = parsedValue === undefined ? value : parsedValue;
@@ -208,12 +209,15 @@ function verifyTypeScriptSetup() {
       }
     } else if (parsedCompilerOptions[option] !== valueToCheck) {
       appTsConfig.compilerOptions[option] = value;
-      messages.push(
-        `${coloredOption} ${chalk.bold(
-          valueToCheck == null ? 'must not' : 'must'
-        )} be ${valueToCheck == null ? 'set' : chalk.cyan.bold(value)}` +
-          (reason != null ? ` (${reason})` : '')
-      );
+
+      if (!isSkippedOption) {
+        messages.push(
+          `${coloredOption} ${chalk.bold(
+            valueToCheck == null ? 'must not' : 'must'
+          )} be ${valueToCheck == null ? 'set' : chalk.cyan.bold(value)}` +
+            (reason != null ? ` (${reason})` : '')
+        );
+      }
     }
   }
 
