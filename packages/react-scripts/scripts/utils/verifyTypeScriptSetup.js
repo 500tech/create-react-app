@@ -127,7 +127,8 @@ function verifyTypeScriptSetup() {
     },
     paths: {
       value: {
-        '*': ['./src/*', './__tests__/*'],
+        '*': ['./src/*'],
+        '__tests__/*': ['./__tests__/*'],
       },
       reason: 'aliased imports are supported',
     },
