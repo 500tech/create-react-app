@@ -99,6 +99,7 @@ module.exports = function(
     build: 'react-scripts build',
     test: 'react-scripts test',
     eject: 'react-scripts eject',
+    'remove-typescript': 'react-scripts remove-typescript',
     precommit: 'lint-staged',
     postcommit: 'git reset',
     flow: 'flow',
