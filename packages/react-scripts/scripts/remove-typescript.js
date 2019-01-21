@@ -14,6 +14,7 @@ const paths = require('../config/paths');
 const babel = require('@babel/core');
 const path = require('path');
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const green = chalk.green;
 const cyan = chalk.cyan;
@@ -113,5 +114,8 @@ inquirer
 
     transformPackageJson();
 
-    console.log(green('transformation complete!'));
+    // remove types directory
+    rimraf.sync(path.join(paths.appSrc, 'types'));
+
+    console.log(green('Project converted to Javascript!'));
   });
