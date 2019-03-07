@@ -629,18 +629,6 @@ module.exports = function(webpackEnv) {
           useTypescriptIncrementalApi: true,
           checkSyntacticErrors: true,
           tsconfig: paths.appTsConfig,
-          compilerOptions: {
-            module: 'esnext',
-            moduleResolution: 'node',
-            resolveJsonModule: true,
-            isolatedModules: false,
-            noEmit: true,
-            jsx: 'preserve',
-            baseUrl: '.',
-            paths: {
-              '*': ['./src/*'],
-            },
-          },
           reportFiles: [
             '**',
             '!**/*.json',
