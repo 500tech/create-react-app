@@ -1,6 +1,6 @@
 {
   "name": "@500tech/react-scripts",
-  "version": "2.1.12-beta.1",
+  "version": "2.1.13",
   "description": "Configuration and scripts for Create React App.",
   "repository": "500tech/create-react-app",
   "license": "MIT",
