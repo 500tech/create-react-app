@@ -56,7 +56,8 @@ module.exports = (resolve, rootDir, isEjecting) => {
     moduleNameMapper: {
       '^react-native$': 'react-native-web',
       '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-      'react-intl$': resolve('config/jest/react-intlMock.js'),
+        'react-intl$': resolve('config/jest/react-intlMock.js'),
+    ...(modules.jestAliases || {}),
     },
     moduleFileExtensions: [...paths.moduleFileExtensions, 'node'].filter(
       ext => !ext.includes('mjs')
