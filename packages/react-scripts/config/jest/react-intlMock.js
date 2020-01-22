@@ -55,6 +55,8 @@ const FormattedRelative = () => React.createElement('div');
 const IntlProvider = ({ children }) =>
   React.createElement('div', null, children);
 
+const useIntl = () => ({ formatMessage: ({ id }) => `TranslationKey(${id})` });
+
 module.exports = {
   addLocaleData,
   FormattedMessage,
@@ -67,4 +69,5 @@ module.exports = {
   intlShape,
   injectIntl: data => data,
   IntlProvider,
+  useIntl
 };
