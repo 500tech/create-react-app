@@ -39,18 +39,19 @@ module.exports = (resolve, rootDir, isEjecting) => {
       '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx,mjs}',
       '<rootDir>/__tests__/**/*.{spec,test}.{js,jsx,ts,tsx,mjs}'
     ],
-    testEnvironment: 'jest-environment-jsdom-fourteen',
+    testEnvironment: 'jsdom',
+    testRunner: require.resolve('jest-circus/runner'),
     transform: {
-      '^.+\\.(js|jsx|ts|tsx)$': isEjecting
+      '^.+\\.(js|jsx|mjs|cjs|ts|tsx)$': isEjecting
         ? '<rootDir>/node_modules/babel-jest'
         : resolve('config/jest/babelTransform.js'),
       '^.+\\.css$': resolve('config/jest/cssTransform.js'),
-      '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': resolve(
+      '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)': resolve(
         'config/jest/fileTransform.js'
       ),
     },
     transformIgnorePatterns: [
-      '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$',
+      '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
       '^.+\\.module\\.(css|sass|scss)$',
     ],
     moduleNameMapper: {
@@ -66,6 +67,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
       'jest-watch-typeahead/filename',
       'jest-watch-typeahead/testname',
     ],
+    resetMocks: true,
     moduleDirectories: ['node_modules', 'src'],
     modulePaths: ['/app', '<rootDir>'],
   };
@@ -88,6 +90,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     'resetModules',
     'restoreMocks',
     'snapshotSerializers',
+    'testMatch',
     'transform',
     'transformIgnorePatterns',
     'watchPathIgnorePatterns',
