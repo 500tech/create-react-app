@@ -64,6 +64,8 @@ module.exports = function (api, opts, env) {
     );
   }
 
+  var useStyledComponents = process.env.USE_STYLED_COMPONENTS === 'true'
+
   return {
     presets: [
       isEnvTest && [
@@ -177,7 +179,7 @@ module.exports = function (api, opts, env) {
           absoluteRuntime: absoluteRuntimePath,
         },
       ],
-      require('babel-plugin-emotion').default,
+      useStyledComponents ? require('babel-plugin-styled-components').default : require('babel-plugin-emotion').default,
       isEnvProduction && [
         // Remove PropTypes from production build
         require('babel-plugin-transform-react-remove-prop-types').default,
@@ -191,7 +193,6 @@ module.exports = function (api, opts, env) {
       // See https://github.com/facebook/create-react-app/issues/8445#issuecomment-588512250
       require('@babel/plugin-proposal-optional-chaining').default,
       require('@babel/plugin-proposal-nullish-coalescing-operator').default,
-      require('babel-plugin-styled-components').default,
     ].filter(Boolean),
     overrides: [
       isFlowEnabled && {
