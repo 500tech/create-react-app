@@ -103,6 +103,7 @@ module.exports = function (api, opts, env) {
         },
       ],
       isTypeScriptEnabled && [require('@babel/preset-typescript').default],
+      !useStyledComponents && require('@emotion/babel-preset-css-prop').default
     ].filter(Boolean),
     plugins: [
       // Strip flow types before any other transform, emulating the behavior
@@ -179,7 +180,7 @@ module.exports = function (api, opts, env) {
           absoluteRuntime: absoluteRuntimePath,
         },
       ],
-      useStyledComponents ? require('babel-plugin-styled-components').default : require('babel-plugin-emotion').default,
+      useStyledComponents && require('babel-plugin-styled-components').default,
       isEnvProduction && [
         // Remove PropTypes from production build
         require('babel-plugin-transform-react-remove-prop-types').default,
