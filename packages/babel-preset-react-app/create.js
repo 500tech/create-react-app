@@ -65,6 +65,7 @@ module.exports = function (api, opts, env) {
   }
 
   var useStyledComponents = process.env.USE_STYLED_COMPONENTS === 'true'
+  var useLegacyEmotionPlugin = process.env.USE_LEGACY_EMOTION === 'true'
 
   return {
     presets: [
@@ -102,7 +103,7 @@ module.exports = function (api, opts, env) {
         },
       ],
       isTypeScriptEnabled && [require('@babel/preset-typescript').default],
-      !useStyledComponents && require('@emotion/babel-preset-css-prop').default
+      useLegacyEmotionPlugin && require('@emotion/babel-preset-css-prop').default
     ].filter(Boolean),
     plugins: [
       // Strip flow types before any other transform, emulating the behavior
@@ -180,6 +181,7 @@ module.exports = function (api, opts, env) {
         },
       ],
       useStyledComponents && require('babel-plugin-styled-components').default,
+      !useStyledComponents && !useLegacyEmotionPlugin && require('@emotion/babel-plugin').default,
       isEnvProduction && [
         // Remove PropTypes from production build
         require('babel-plugin-transform-react-remove-prop-types').default,
