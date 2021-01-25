@@ -1,6 +1,6 @@
 {
   "name": "@500tech/react-scripts",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Configuration and scripts for Create React App.",
   "repository": "500tech/create-react-app",
   "license": "MIT",
@@ -28,7 +28,7 @@
   },
   "types": "./lib/react-app.d.ts",
   "dependencies": {
-    "@500tech/babel-preset-react-app": "11.0.0",
+    "@500tech/babel-preset-react-app": "11.1.0",
     "@babel/core": "7.12.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
